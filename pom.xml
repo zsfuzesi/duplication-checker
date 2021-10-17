@@ -6,7 +6,7 @@
 
     <artifactId>file-duplication-checker</artifactId>
     <groupId>hu.fuzesizs</groupId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>consoleApp</name>
