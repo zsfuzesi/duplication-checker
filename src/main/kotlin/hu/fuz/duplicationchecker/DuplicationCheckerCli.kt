@@ -10,23 +10,35 @@ class DuplicationCheckerCli : Callable<Int> {
     lateinit var directories : Array<File>
 
     @Option(names = ["--erease-from"], description = ["erease duplications from here"])
-    var ereaseFromDirectory : File? = null
+    var isEreaseFromDirectory : File? = null
 
     @Option(names = ["--erease-from-dry-run"], description = ["create remove script"])
-    var ereaseFromDirectoryDryRun : Boolean = false
+    var isEreaseFromDirectoryDryRun : Boolean = false
 
-    @Option(names = ["--compare-strategy"], description = ["\${COMPLETION-CANDIDATES}"])
+    @Option(names = ["--print-single-files"], description = ["print not duplicated files"])
+    var isPrintSingleFiles : Boolean = false
+
+    @Option(names = ["--print-duplication"], description = ["print duplicated files"])
+    var isPrintDuplicatedFiles : Boolean = false
+
+    @Option(names = ["--comparation-strategy"], description = ["\${COMPLETION-CANDIDATES}"])
     var comparationStrategy : ComparationStrategy = ComparationStrategy.FILE_NAME_ONLY
 
     override fun call(): Int {
-        val executor = DuplicationCheckerExecutor(
-            directories,
-            comparationStrategy,
-            ereaseFromDirectory,
-            ereaseFromDirectoryDryRun
-        )
-        executor.execute()
-
-        return 0
+        try {
+            val executor = DuplicationCheckerExecutor(
+                directories,
+                comparationStrategy,
+                isPrintSingleFiles,
+                isPrintDuplicatedFiles,
+                isEreaseFromDirectory,
+                isEreaseFromDirectoryDryRun
+            )
+            executor.execute()
+            return 0
+        }catch (exception : Exception){
+            exception.printStackTrace()
+            return -1
+        }
     }
 }

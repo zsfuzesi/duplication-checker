@@ -5,20 +5,19 @@ import java.io.File
 
 class DuplicationChecker {
 
-    var singleFiles: MutableList<File> = mutableListOf()
-        private set
+    val singleFiles: MutableList<File> = mutableListOf()
     val duplicatedFiles: MutableSet<File> = mutableSetOf()
     val duplications: MutableList<List<File>> = mutableListOf()
     private val files: MutableList<File> = mutableListOf()
 
     fun collectDuplications(
         vararg directoryPath: String,
-        compareFileContent: Boolean = false,
-        compareFileName: Boolean = true
+        isCompareFileContent: Boolean = false,
+        isCompareFileName: Boolean = true
     ) {
         checkDirectories(directoryPath)
         collectAllFileInTheDirectoryStructure(directoryPath)
-        collectDuplications(compareFileName, compareFileContent)
+        collectDuplications(isCompareFileName, isCompareFileContent)
         collectSingleFiles()
     }
 
@@ -30,10 +29,10 @@ class DuplicationChecker {
         }
     }
 
-    private fun collectDuplications(compareFileName: Boolean, compareFileContent: Boolean) {
+    private fun collectDuplications(isCompareFileName: Boolean, isCompareFileContent: Boolean) {
         files.forEach { file ->
             if (!duplicatedFiles.contains(file)) {
-                val duplicationsForFile = getDuplicationsOfFile(file, compareFileName, compareFileContent)
+                val duplicationsForFile = collectDuplicationsOf(file, isCompareFileName, isCompareFileContent)
                 if (duplicationsForFile.isNotEmpty()) {
                     duplicatedFiles.addAll(duplicationsForFile)
                     duplications.add(duplicationsForFile)
@@ -43,7 +42,7 @@ class DuplicationChecker {
     }
 
     private fun collectSingleFiles() {
-        singleFiles = files.toMutableList()
+        singleFiles.addAll(files.toMutableList())
         singleFiles.removeAll(duplicatedFiles)
     }
 
@@ -57,7 +56,7 @@ class DuplicationChecker {
         }
     }
 
-    private fun getDuplicationsOfFile(
+    private fun collectDuplicationsOf(
         file: File,
         compareFileName: Boolean,
         compareFileContent: Boolean

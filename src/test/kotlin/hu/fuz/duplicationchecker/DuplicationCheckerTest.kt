@@ -3,18 +3,10 @@ package hu.fuz.duplicationchecker
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 internal class DuplicationCheckerTest{
-
-    private val test_gallery_path = "./src/test/resources/testgallery"
-    private val a_alma = File("$test_gallery_path/a/alma.txt")
-    private val b_alma = File("$test_gallery_path/b/alma.txt")
-    private val a_b_banan = File("$test_gallery_path/a/b/banán.txt")
-    private val c_banan = File("$test_gallery_path/c/banán.txt")
-    private val a_korte = File("$test_gallery_path/a/körte.txt")
 
     lateinit var checker : DuplicationChecker
 
@@ -64,7 +56,7 @@ internal class DuplicationCheckerTest{
     fun `compare by name and file content`(){
         checker.collectDuplications(
             test_gallery_path,
-            compareFileContent = true)
+            isCompareFileContent = true)
         assertEquals(2,checker.duplicatedFiles.size)
         assertTrue(checker.duplicatedFiles.contains(a_b_banan))
         assertTrue(checker.duplicatedFiles.contains(c_banan))
@@ -79,8 +71,8 @@ internal class DuplicationCheckerTest{
     fun `compare by file content only`(){
         checker.collectDuplications(
             test_gallery_path,
-            compareFileName = false,
-            compareFileContent = true)
+            isCompareFileName = false,
+            isCompareFileContent = true)
         assertEquals(3,checker.duplicatedFiles.size)
         assertTrue(checker.duplicatedFiles.contains(a_b_banan))
         assertTrue(checker.duplicatedFiles.contains(c_banan))
