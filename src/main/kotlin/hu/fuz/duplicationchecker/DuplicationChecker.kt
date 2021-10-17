@@ -10,15 +10,14 @@ class DuplicationChecker {
     val duplications: MutableList<List<File>> = mutableListOf()
     private val files: MutableList<File> = mutableListOf()
 
-    fun collectDuplications(
+    fun collectDuplicationsAndSingleFiles(
         vararg directoryPath: String,
         isCompareFileContent: Boolean = false,
         isCompareFileName: Boolean = true
     ) {
         checkDirectories(directoryPath)
         collectAllFileInTheDirectoryStructure(directoryPath)
-        collectDuplications(isCompareFileName, isCompareFileContent)
-        collectSingleFiles()
+        collectDuplicationsAndSingleFiles(isCompareFileName, isCompareFileContent)
     }
 
     private fun checkDirectories(directoryPath: Array<out String>) {
@@ -29,21 +28,19 @@ class DuplicationChecker {
         }
     }
 
-    private fun collectDuplications(isCompareFileName: Boolean, isCompareFileContent: Boolean) {
-        files.forEach { file ->
-            if (!duplicatedFiles.contains(file)) {
-                val duplicationsForFile = collectDuplicationsOf(file, isCompareFileName, isCompareFileContent)
-                if (duplicationsForFile.isNotEmpty()) {
-                    duplicatedFiles.addAll(duplicationsForFile)
-                    duplications.add(duplicationsForFile)
-                }
+    private fun collectDuplicationsAndSingleFiles(isCompareFileName: Boolean, isCompareFileContent: Boolean) {
+        while ( files.isNotEmpty() ) {
+            val file = files[0]
+            val duplicationsForFile = collectDuplicationsOf(file, isCompareFileName, isCompareFileContent)
+            if (duplicationsForFile.isEmpty()) {
+                singleFiles += file
+                files.remove(file)
+            } else {
+                duplicatedFiles.addAll(duplicationsForFile)
+                duplications.add(duplicationsForFile)
+                files.removeAll(duplicationsForFile)
             }
         }
-    }
-
-    private fun collectSingleFiles() {
-        singleFiles.addAll(files.toMutableList())
-        singleFiles.removeAll(duplicatedFiles)
     }
 
     private fun collectAllFileInTheDirectoryStructure(directoriesPath: Array<out String>) {

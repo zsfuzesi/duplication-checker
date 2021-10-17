@@ -19,7 +19,7 @@ class DuplicationCheckerExecutor(
          * named arguments, pl.: 2 boolean paraméter esetén könnyű összekeverni
          * https://kotlinlang.org/docs/functions.html#named-arguments
          */
-        checker.collectDuplications(
+        checker.collectDuplicationsAndSingleFiles(
             directoryPath = getFilePaths(directories),
             isCompareFileContent = isCompareFileContent(comparationStrategy),
             isCompareFileName = isCompareFileName(comparationStrategy),
