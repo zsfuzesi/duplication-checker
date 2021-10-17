@@ -3,7 +3,7 @@ package hu.fuz.duplicationchecker
 import java.io.File
 
 class DuplicationCheckerExecutor(
-    val directories: Array<File>,
+    val directories: List<File>,
     val comparationStrategy: ComparationStrategy,
     val isSingleFilesPrint: Boolean,
     val isDuplicatedFilesPrint: Boolean,
@@ -62,5 +62,5 @@ class DuplicationCheckerExecutor(
         (strategy == ComparationStrategy.FILE_NAME_AND_CONTENT
                 || strategy == ComparationStrategy.FILE_CONTENT_ONLY)
 
-    private fun getFilePaths(dirs: Array<File>) = dirs.map { d -> d.path }.toTypedArray()
+    private fun getFilePaths(dirs: List<File>) = dirs.map { d -> d.path }.toTypedArray()
 }

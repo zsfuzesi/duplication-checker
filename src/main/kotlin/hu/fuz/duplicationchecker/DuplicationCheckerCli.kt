@@ -7,7 +7,7 @@ import java.util.concurrent.Callable
 class DuplicationCheckerCli : Callable<Int> {
 
     @Option(names = ["--directories"], required = true,  description = ["directories of files"])
-    lateinit var directories : Array<File>
+    lateinit var directories : List<File>
 
     @Option(names = ["--erease-from"], description = ["erease duplications from here"])
     var isEreaseFromDirectory : File? = null
