@@ -26,12 +26,11 @@ class DuplicationCheckerExecutor(
         )
         resultPrinter.printResult(checker.singleFiles, checker.duplications)
 
-        deleteFiles(checker, resultPrinter)
+        deleteFiles(checker)
     }
 
     private fun deleteFiles(
         checker: DuplicationChecker,
-        resultPrinter: ResultPrinter
     ) {
         if (ereaseFromDirectory != null) {
             val collector = FileForDeleteCollector(checker.duplications, ereaseFromDirectory)
