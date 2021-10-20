@@ -6,7 +6,7 @@ class ResultPrinter(
     val isSingleFilesPrint: Boolean,
     val isDuplicatedFilesPrint: Boolean,) {
 
-    fun printResult(singleFiles: List<File>, duplications: List<List<File>>) {
+    fun printResult(singleFiles: Iterable<File>, duplications: FileDuplicatinGroup) {
         if(isSingleFilesPrint) {
             printSingleFiles(singleFiles)
         }
@@ -16,7 +16,7 @@ class ResultPrinter(
         }
     }
 
-    private fun printDuplicatedFiles(duplications: List<List<File>>) {
+    private fun printDuplicatedFiles(duplications: FileDuplicatinGroup) {
         println(
             """
             
@@ -30,7 +30,7 @@ class ResultPrinter(
         }
     }
 
-    private fun printSingleFiles(singleFiles: List<File>) {
+    private fun printSingleFiles(singleFiles: Iterable<File>) {
         println(
             """
             

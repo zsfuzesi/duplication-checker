@@ -21,8 +21,8 @@ class DuplicationCheckerExecutor(
          */
         checker.collectDuplicationsAndSingleFiles(
             directoryPath = getFilePaths(directories),
-            isCompareFileContent = isCompareFileContent(comparationStrategy),
-            isCompareFileName = isCompareFileName(comparationStrategy),
+            compareByFileContent = isCompareFileContent(comparationStrategy),
+            compareByFileName = isCompareFileName(comparationStrategy),
         )
         resultPrinter.printResult(checker.singleFiles, checker.duplications)
 

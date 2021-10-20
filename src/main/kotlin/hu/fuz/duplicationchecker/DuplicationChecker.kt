@@ -3,21 +3,23 @@ package hu.fuz.duplicationchecker
 import org.apache.commons.io.FileUtils
 import java.io.File
 
+typealias FileDuplicatinGroup = MutableList<List<File>>
+
 class DuplicationChecker {
 
-    val singleFiles: MutableList<File> = mutableListOf()
+    val singleFiles: MutableSet<File> = mutableSetOf()
     val duplicatedFiles: MutableSet<File> = mutableSetOf()
-    val duplications: MutableList<List<File>> = mutableListOf()
+    val duplications: FileDuplicatinGroup = mutableListOf()
     private val files: MutableList<File> = mutableListOf()
 
     fun collectDuplicationsAndSingleFiles(
         vararg directoryPath: String,
-        isCompareFileContent: Boolean = false,
-        isCompareFileName: Boolean = true
+        compareByFileContent: Boolean = false,
+        compareByFileName: Boolean = true
     ) {
         checkDirectories(directoryPath)
         collectAllFileInTheDirectoryStructure(directoryPath)
-        collectDuplicationsAndSingleFiles(isCompareFileName, isCompareFileContent)
+        collectDuplicationsAndSingleFiles(compareByFileName, compareByFileContent)
     }
 
     private fun checkDirectories(directoryPath: Array<out String>) {
@@ -28,10 +30,10 @@ class DuplicationChecker {
         }
     }
 
-    private fun collectDuplicationsAndSingleFiles(isCompareFileName: Boolean, isCompareFileContent: Boolean) {
+    private fun collectDuplicationsAndSingleFiles(compareByFileName: Boolean, compareByFileContent: Boolean) {
         while ( files.isNotEmpty() ) {
             val file = files[0]
-            val duplicationsForFile = collectDuplicationsOf(file, isCompareFileName, isCompareFileContent)
+            val duplicationsForFile = collectDuplicationsOf(file, compareByFileName, compareByFileContent)
             if (duplicationsForFile.isEmpty()) {
                 singleFiles += file
                 files.remove(file)
@@ -55,13 +57,13 @@ class DuplicationChecker {
 
     private fun collectDuplicationsOf(
         file: File,
-        isCompareByFileName: Boolean,
-        isCompareFileContent: Boolean
+        compareByFileName: Boolean,
+        compareByFileContent: Boolean
     ): List<File> {
         val duplications = mutableListOf<File>()
         files.forEach {
-            if ((!isCompareByFileName || isFileWithSameName(it, file))
-                && (!isCompareFileContent || isFileWithSameContent(it, file))
+            if ((!compareByFileName || isFileNameEquals(it, file))
+                && (!compareByFileContent || isFileContentEquals(it, file))
             ) {
                 duplications.add(it)
             }
@@ -70,10 +72,10 @@ class DuplicationChecker {
         return duplications
     }
 
-    private fun isFileWithSameContent(it: File, file: File) =
+    private fun isFileContentEquals(it: File, file: File) =
         notSameFile(it, file) && FileUtils.contentEquals(it, file)
 
-    private fun isFileWithSameName(it: File, file: File) = notSameFile(it, file) && file.name.equals(it.name)
+    private fun isFileNameEquals(it: File, file: File) = notSameFile(it, file) && file.name.equals(it.name)
 
-    private fun notSameFile(it: File, file: File) = !it.equals(file)
+    private fun notSameFile(it: File, file: File) = it != file
 }

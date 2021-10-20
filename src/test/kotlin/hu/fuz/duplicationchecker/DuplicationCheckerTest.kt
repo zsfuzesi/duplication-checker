@@ -56,7 +56,7 @@ internal class DuplicationCheckerTest{
     fun `compare by name and file content`(){
         checker.collectDuplicationsAndSingleFiles(
             test_gallery_path,
-            isCompareFileContent = true)
+            compareByFileContent = true)
         assertEquals(2,checker.duplicatedFiles.size)
         assertTrue(checker.duplicatedFiles.contains(a_b_banan))
         assertTrue(checker.duplicatedFiles.contains(c_banan))
@@ -71,8 +71,8 @@ internal class DuplicationCheckerTest{
     fun `compare by file content only`(){
         checker.collectDuplicationsAndSingleFiles(
             test_gallery_path,
-            isCompareFileName = false,
-            isCompareFileContent = true)
+            compareByFileName = false,
+            compareByFileContent = true)
         assertEquals(3,checker.duplicatedFiles.size)
         assertTrue(checker.duplicatedFiles.contains(a_b_banan))
         assertTrue(checker.duplicatedFiles.contains(c_banan))
