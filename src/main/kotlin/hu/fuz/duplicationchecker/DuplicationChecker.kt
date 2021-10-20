@@ -55,13 +55,13 @@ class DuplicationChecker {
 
     private fun collectDuplicationsOf(
         file: File,
-        compareFileName: Boolean,
-        compareFileContent: Boolean
+        isCompareByFileName: Boolean,
+        isCompareFileContent: Boolean
     ): List<File> {
         val duplications = mutableListOf<File>()
         files.forEach {
-            if ((!compareFileName || isFileWithSameName(it, file))
-                && (!compareFileContent || isFileWithSameContent(it, file))
+            if ((!isCompareByFileName || isFileWithSameName(it, file))
+                && (!isCompareFileContent || isFileWithSameContent(it, file))
             ) {
                 duplications.add(it)
             }
