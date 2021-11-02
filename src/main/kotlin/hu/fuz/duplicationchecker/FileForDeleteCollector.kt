@@ -3,29 +3,28 @@ package hu.fuz.duplicationchecker
 import java.io.File
 
 class FileForDeleteCollector(
-    val files: List<List<File>>,
-    val ereaseFromDirectory: File?
+    private val files: List<List<File>>,
+    private val eraseFromDirectory: File?
 ) {
 
-    lateinit var filesForErease: MutableList<File>
-    lateinit var duplicationsInEreaseFromDirectory: MutableSet<File>
-
-    fun calculateFilesForErease() {
-        filesForErease = mutableListOf()
-        duplicationsInEreaseFromDirectory = mutableSetOf()
+    fun calculateFilesForErease(): FilesForEraseResult {
+        val filesForErase: MutableList<File> = mutableListOf()
+        val duplicationsInEraseFromDirectory: MutableSet<File> = hashSetOf()
 
         files.forEach { duplications ->
             val filesInEreaseFromDirectory = collectFilesInEreaseFromDirectory(duplications)
-            if(isExactlyOneFileExistsIn(filesInEreaseFromDirectory)){
-                filesForErease += filesInEreaseFromDirectory[0]
-            }else if(isMoreThanOneFileExistsIn(filesInEreaseFromDirectory)){
-                duplicationsInEreaseFromDirectory += filesInEreaseFromDirectory
+            if (isExactlyOneFileExistsIn(filesInEreaseFromDirectory)) {
+                filesForErase += filesInEreaseFromDirectory[0]
+            } else if (isMoreThanOneFileExistsIn(filesInEreaseFromDirectory)) {
+                duplicationsInEraseFromDirectory += filesInEreaseFromDirectory
             }
         }
+
+        return FilesForEraseResult(filesForErase, duplicationsInEraseFromDirectory)
     }
 
     private fun collectFilesInEreaseFromDirectory(duplications: List<File>) =
-        duplications.filter { it.parentFile.equals(ereaseFromDirectory) }
+        duplications.filter { it.parentFile.equals(eraseFromDirectory) }
 
     private fun isExactlyOneFileExistsIn(files: List<File>) = files.size == 1
     private fun isMoreThanOneFileExistsIn(files: List<File>) = files.size > 1

@@ -3,8 +3,8 @@ package hu.fuz.duplicationchecker
 import java.io.File
 
 class ResultPrinter(
-    val isSingleFilesPrint: Boolean,
-    val isDuplicatedFilesPrint: Boolean,) {
+    private val isSingleFilesPrint: Boolean,
+    private val isDuplicatedFilesPrint: Boolean,) {
 
     fun printResult(singleFiles: Iterable<File>, duplications: FileDuplicatinGroup) {
         if(isSingleFilesPrint) {
@@ -51,7 +51,7 @@ class ResultPrinter(
     }
 
     fun printFileAfterErease(absolutePath: String) {
-        println("${absolutePath} deleted")
+        println("$absolutePath deleted")
     }
 
 }

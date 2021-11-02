@@ -11,9 +11,11 @@ internal class FileForDeleteCollectorTest{
             a_alma,
             c_banan
         ))
-        val ereaser = FileForDeleteCollector(files, c_banan.parentFile)
-        ereaser.calculateFilesForErease()
-        val filesForErease = ereaser.filesForErease
+        val filesForErease =
+            FileForDeleteCollector(files, c_banan.parentFile)
+                .calculateFilesForErease()
+                .filesForErase
+
         assertTrue(filesForErease.isNotEmpty())
         assertEquals(1, filesForErease.size)
         assertEquals(c_banan, filesForErease[0])
@@ -25,8 +27,7 @@ internal class FileForDeleteCollectorTest{
             a_alma,
             a_korte
         ))
-        val ereaser = FileForDeleteCollector(files, a_alma.parentFile)
-        ereaser.calculateFilesForErease()
-        assertTrue(ereaser.filesForErease.isEmpty())
+        val result = FileForDeleteCollector(files, a_alma.parentFile).calculateFilesForErease()
+        assertTrue(result.filesForErase.isEmpty())
     }
 }

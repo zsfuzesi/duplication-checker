@@ -7,19 +7,21 @@ typealias FileDuplicatinGroup = MutableList<List<File>>
 
 class DuplicationChecker {
 
-    val singleFiles: MutableSet<File> = mutableSetOf()
-    val duplicatedFiles: MutableSet<File> = mutableSetOf()
-    val duplications: FileDuplicatinGroup = mutableListOf()
+    private val singleFiles: MutableSet<File> = mutableSetOf()
+    private val duplicatedFiles: MutableSet<File> = mutableSetOf()
+    private val duplications: FileDuplicatinGroup = mutableListOf()
     private val files: MutableList<File> = mutableListOf()
 
     fun collectDuplicationsAndSingleFiles(
         vararg directoryPath: String,
         compareByFileContent: Boolean = false,
         compareByFileName: Boolean = true
-    ) {
+    )
+    : DuplicationCheckerResult {
         checkDirectories(directoryPath)
         collectAllFileInTheDirectoryStructure(directoryPath)
         collectDuplicationsAndSingleFiles(compareByFileName, compareByFileContent)
+        return DuplicationCheckerResult(singleFiles, duplicatedFiles, duplications)
     }
 
     private fun checkDirectories(directoryPath: Array<out String>) {

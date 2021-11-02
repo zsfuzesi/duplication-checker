@@ -19,29 +19,31 @@ class DuplicationCheckerExecutor(
          * named arguments, pl.: 2 boolean paraméter esetén könnyű összekeverni
          * https://kotlinlang.org/docs/functions.html#named-arguments
          */
-        checker.collectDuplicationsAndSingleFiles(
-            directoryPath = getFilePaths(directories),
-            compareByFileContent = isCompareFileContent(comparationStrategy),
-            compareByFileName = isCompareFileName(comparationStrategy),
-        )
-        resultPrinter.printResult(checker.singleFiles, checker.duplications)
+        val result =
+            checker.collectDuplicationsAndSingleFiles(
+                directoryPath = getFilePaths(directories),
+                compareByFileContent = isCompareFileContent(comparationStrategy),
+                compareByFileName = isCompareFileName(comparationStrategy),
+            )
+        resultPrinter.printResult(result.singleFiles, result.duplications)
 
-        deleteFiles(checker)
+        deleteFiles(result)
     }
 
     private fun deleteFiles(
-        checker: DuplicationChecker,
+        result: DuplicationCheckerResult,
     ) {
         if (ereaseFromDirectory != null) {
-            val collector = FileForDeleteCollector(checker.duplications, ereaseFromDirectory)
-            collector.calculateFilesForErease()
-            val filesForErease = collector.filesForErease
+            val collector = FileForDeleteCollector(result.duplications, ereaseFromDirectory)
+            val filesForErase = collector.calculateFilesForErease().filesForErase
             /** when expression
              * https://kotlinlang.org/docs/control-flow.html#when-expression
              */
-            when (ereaseFromDirectoryDryRun) {
-                true -> resultPrinter.printEreaseDryRun(filesForErease.map { "rm ${it.path}" })
-                false -> deleteFiles(filesForErease)
+            with(filesForErase) {
+                when (ereaseFromDirectoryDryRun) {
+                    true -> resultPrinter.printEreaseDryRun(this.map { "rm ${it.path}" })
+                    false -> deleteFiles(this)
+                }
             }
         }
     }
